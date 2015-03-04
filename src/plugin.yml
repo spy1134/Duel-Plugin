@@ -10,4 +10,4 @@ permissions:
     duel.admin:
         description: Allows you to update duel locations
         default: op
-main: com.github.spy1134.duelplugin.Plugin
+main: com.github.spy1134.DuelPlugin.Plugin

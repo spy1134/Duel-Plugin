@@ -1,0 +1,13 @@
+name: Duel-Plugin
+author: spy_1134
+description: A custom PVP plugin written for rowinvd
+version: 1.0
+commands:
+    duel:
+        description: Challenge a player to a duel or accept a challenge.
+        usage: /duel help
+permissions:
+    duel.admin:
+        description: Allows you to update duel locations
+        default: op
+main: com.github.spy1134.duelplugin.Plugin

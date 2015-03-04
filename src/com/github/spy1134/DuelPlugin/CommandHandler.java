@@ -1,4 +1,4 @@
-package com.github.spy1134.duelplugin;
+package com.github.spy1134.DuelPlugin;
 
 import java.util.ArrayList;
 import org.bukkit.ChatColor;

@@ -54,21 +54,10 @@ public class EventListener implements Listener {
             }
 
             // Maintain items on death
-            /*
-             if (plugin.keepInventory) {
-             event.setKeepInventory(true);
-             }
-             */
-            PlayerInventory killerInv = killer.getInventory();
-            PlayerInventory opponentInv = opponent.getInventory();
-            killerInv.setHelmet(new ItemStack(Material.IRON_HELMET, 1));
-            killerInv.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
-            killerInv.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
-            killerInv.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
-            opponentInv.setHelmet(new ItemStack(Material.IRON_HELMET, 1));
-            opponentInv.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
-            opponentInv.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
-            opponentInv.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
+            //if (plugin.keepInventory) {
+            event.setKeepInventory(true);
+            //}
+            clearInventories(opponent, killer);
 
             // Maintain experience on death
             if (plugin.keepXP) {
@@ -131,5 +120,22 @@ public class EventListener implements Listener {
                 && player.hasPermission("duel.admin")) {
             player.sendMessage(ChatColor.RED + "The duel plugin must be set up!");
         }
+    }
+
+    public void clearInventories(Player killer, Player opponent) {
+        PlayerInventory killerInv = killer.getInventory();
+        PlayerInventory opponentInv = opponent.getInventory();
+        killerInv.clear();
+        opponentInv.clear();
+        killerInv.setHelmet(new ItemStack(Material.IRON_HELMET, 1));
+        killerInv.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
+        killerInv.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
+        killerInv.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
+        killerInv.setItem(36, new ItemStack(Material.IRON_SWORD, 1));
+        opponentInv.setHelmet(new ItemStack(Material.IRON_HELMET, 1));
+        opponentInv.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
+        opponentInv.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
+        opponentInv.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
+        opponentInv.setItem(36, new ItemStack(Material.IRON_SWORD, 1));
     }
 }

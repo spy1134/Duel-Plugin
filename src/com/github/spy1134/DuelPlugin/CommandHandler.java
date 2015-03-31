@@ -28,31 +28,33 @@ public class CommandHandler implements CommandExecutor {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("help")) {
                 sender.sendMessage(
-                        "Duel Plugin help:\n"
+                        ChatColor.GOLD
+                        + "Duel Plugin help:\n"
                         + "/duel <NAME> - Challenge another player to a duel\n"
                         + "/duel accept <NAME> - Accept a duel request from another player\n"
                         + "/duel deny <NAME> - Deny a duel request from another player\n");
                 if (sender.hasPermission("duel.admin")) {
                     sender.sendMessage(
-                            "Admin commands:\n"
+                            ChatColor.GOLD
+                            + "Admin commands:\n"
                             + "/duel setpos1 - Set the position for the first dueler\n"
                             + "/duel setpos2 - Set the position for the second dueler\n"
                             + "/duel setlobby - Set the arena lobby");
                 }
             } else if (args[0].equalsIgnoreCase("accept")) {
                 if (!plugin.configured) {
-                    sender.sendMessage(ChatColor.RED + "The duel plugin isn't set up yet!");
+                    sender.sendMessage(ChatColor.GOLD + "The duel plugin isn't set up yet!");
                     return true;
                 }
 
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "You must be a player to use this command!");
+                    sender.sendMessage(ChatColor.GOLD + "You must be a player to use this command!");
                     return true;
                 }
                 Player player = (Player) sender;
 
                 if (!(args.length > 1)) {
-                    player.sendMessage(ChatColor.RED + "You must specify part of a player name!");
+                    player.sendMessage(ChatColor.GOLD + "You must specify part of a player name!");
                     return true;
                 }
 
@@ -64,7 +66,7 @@ public class CommandHandler implements CommandExecutor {
                         if (challenger.getDisplayName().contains(args[1])) {
                             // If the player is already in a duel
                             if (plugin.duelManager.isPlayerDueling(challenger)) {
-                                player.sendMessage(ChatColor.RED + "Please try later! That player is already dueling!");
+                                player.sendMessage(ChatColor.GOLD + "Please try later! That player is already dueling!");
                                 return true;
                             }
 
@@ -74,27 +76,27 @@ public class CommandHandler implements CommandExecutor {
                             return true;
                         }
                     }
-                    player.sendMessage(ChatColor.RED + "Could not find a challenger with that name!");
+                    player.sendMessage(ChatColor.GOLD + "Could not find a challenger with that name!");
                     return true;
                 } else {
-                    player.sendMessage(ChatColor.RED + "You have no pending duel requests!");
+                    player.sendMessage(ChatColor.GOLD + "You have no pending duel requests!");
                     return true;
                 }
             } else if (args[0].equalsIgnoreCase("deny")) {
                 if (!(plugin.configured)) {
-                    sender.sendMessage(ChatColor.RED + "The duel plugin isn't set up yet!");
+                    sender.sendMessage(ChatColor.GOLD + "The duel plugin isn't set up yet!");
                     return true;
                 }
 
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "You must be a player to use this command!");
+                    sender.sendMessage(ChatColor.GOLD + "You must be a player to use this command!");
                     return true;
                 }
                 Player player = (Player) sender;
 
                 ArrayList<Player> requests = plugin.getRequests(player);
                 if (requests.isEmpty()) {
-                    sender.sendMessage(ChatColor.RED + "You have no pending duel requests!");
+                    sender.sendMessage(ChatColor.GOLD + "You have no pending duel requests!");
                     return true;
                 }
 
@@ -103,16 +105,16 @@ public class CommandHandler implements CommandExecutor {
                     for (Player challenger : requests) {
                         if (challenger.getDisplayName().contains(args[1])) {
                             requests.remove(challenger);
-                            challenger.sendMessage(ChatColor.RED + player.getDisplayName() + " denied your duel request!");
-                            player.sendMessage(ChatColor.GREEN + "Request denied!");
+                            challenger.sendMessage(ChatColor.GOLD + player.getDisplayName() + " denied your duel request!");
+                            player.sendMessage(ChatColor.GOLD + "Request denied!");
                             break;
                         }
                     }
                 } else {
-                    player.sendMessage(ChatColor.GREEN + "Denying all requests...");
+                    player.sendMessage(ChatColor.GOLD + "Denying all requests...");
                     // Send deny messages to all challengers.
                     for (Player challenger : requests) {
-                        challenger.sendMessage(ChatColor.RED + player.getDisplayName() + " denied your duel request!");
+                        challenger.sendMessage(ChatColor.GOLD + player.getDisplayName() + " denied your duel request!");
                     }
                     requests = new ArrayList<>();
                 }
@@ -120,28 +122,28 @@ public class CommandHandler implements CommandExecutor {
                 plugin.requests.put(player, requests);
             } else if (args[0].equalsIgnoreCase("setlobby")) {
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "You must be a player to use that command!");
+                    sender.sendMessage(ChatColor.GOLD + "You must be a player to use that command!");
                     return true;
                 }
 
                 if (!(sender.hasPermission("duel.admin"))) {
-                    sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+                    sender.sendMessage(ChatColor.GOLD + "You don't have permission to do that!");
                     return true;
                 }
                 Player player = (Player) sender;
                 Location playerLoc = player.getLocation();
 
                 plugin.lobbyLoc = playerLoc;
-                player.sendMessage(ChatColor.GREEN + "Lobby location updated!");
+                player.sendMessage(ChatColor.GOLD + "Lobby location updated!");
                 checkConfig();
             } else if (args[0].equalsIgnoreCase("setpos1")) {
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "You must be a player to use that command!");
+                    sender.sendMessage(ChatColor.GOLD + "You must be a player to use that command!");
                     return true;
                 }
 
                 if (!(sender.hasPermission("duel.admin"))) {
-                    sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+                    sender.sendMessage(ChatColor.GOLD + "You don't have permission to do that!");
                     return true;
                 }
                 Player player = (Player) sender;
@@ -152,18 +154,18 @@ public class CommandHandler implements CommandExecutor {
                     checkConfig();
                 } else {
                     plugin.duelArea = new Arena(playerLoc, null);
-                    player.sendMessage(ChatColor.YELLOW + "Position 2 still needs to be set!");
+                    player.sendMessage(ChatColor.GOLD + "Position 2 still needs to be set!");
                 }
-                player.sendMessage(ChatColor.GREEN + "Position one updated!");
+                player.sendMessage(ChatColor.GOLD + "Position one updated!");
                 return true;
             } else if (args[0].equalsIgnoreCase("setpos2")) {
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "You must be a player to use that command!");
+                    sender.sendMessage(ChatColor.GOLD + "You must be a player to use that command!");
                     return true;
                 }
 
                 if (!(sender.hasPermission("duel.admin"))) {
-                    sender.sendMessage(ChatColor.RED + "You don't have permission to do that!");
+                    sender.sendMessage(ChatColor.GOLD + "You don't have permission to do that!");
                     return true;
                 }
                 Player player = (Player) sender;
@@ -174,25 +176,25 @@ public class CommandHandler implements CommandExecutor {
                     checkConfig();
                 } else {
                     plugin.duelArea = new Arena(null, playerLoc);
-                    player.sendMessage(ChatColor.YELLOW + "Position 1 still needs to be set!");
+                    player.sendMessage(ChatColor.GOLD + "Position 1 still needs to be set!");
                 }
-                player.sendMessage(ChatColor.GREEN + "Position two updated!");
+                player.sendMessage(ChatColor.GOLD + "Position two updated!");
             } else {
                 if (!plugin.configured) {
-                    sender.sendMessage(ChatColor.RED + "The duel plugin isn't set up yet!");
+                    sender.sendMessage(ChatColor.GOLD + "The duel plugin isn't set up yet!");
                     return true;
                 }
 
                 // This might be a player to challenge.
                 if (!(sender instanceof Player)) {
-                    sender.sendMessage(ChatColor.RED + "You must be a player to challenge others to a duel!");
+                    sender.sendMessage(ChatColor.GOLD + "You must be a player to challenge others to a duel!");
                     return true;
                 }
                 Player challenger = (Player) sender;
 
                 // If the requester is currently dueling
                 if (plugin.duelManager.isPlayerDueling(challenger)) {
-                    challenger.sendMessage(ChatColor.RED + "You're already dueling! Get back to the fight!");
+                    challenger.sendMessage(ChatColor.GOLD + "You're already dueling! Get back to the fight!");
                     return true;
                 }
 
@@ -202,27 +204,27 @@ public class CommandHandler implements CommandExecutor {
                     if (player.getDisplayName().contains(args[0])) {
                         // If the match is the player who searched
                         if (player == challenger) {
-                            challenger.sendMessage(ChatColor.RED + "You can't challenge yourself to a duel!");
+                            challenger.sendMessage(ChatColor.GOLD + "You can't challenge yourself to a duel!");
                             return true;
                         }
 
                         ArrayList<Player> requests = plugin.getRequests(player);
                         if (requests.contains(challenger)) {
-                            challenger.sendMessage(ChatColor.RED + "There is already a pending challenge for this player!");
+                            challenger.sendMessage(ChatColor.GOLD + "There is already a pending challenge for this player!");
                             return true;
                         }
 
-                        player.sendMessage(ChatColor.GREEN + challenger.getDisplayName()
+                        player.sendMessage(ChatColor.GOLD + challenger.getDisplayName()
                                 + " has challenged you to a duel!\n"
                                 + "/duel accept <NAME> or /duel deny <NAME>");
                         requests.add(challenger);
                         plugin.requests.put(player, requests);
-                        challenger.sendMessage(ChatColor.GREEN + "Challenge sent!");
+                        challenger.sendMessage(ChatColor.GOLD + "Challenge sent!");
                     }
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "You must specify an argument!");
+            sender.sendMessage(ChatColor.GOLD + "You must specify an argument!");
             return false;
         }
         return true;

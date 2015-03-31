@@ -3,15 +3,19 @@ package com.github.spy1134.DuelPlugin;
 import static java.lang.Math.floor;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class EventListener implements Listener {
 
-    private Plugin plugin;
+    private final Plugin plugin;
 
     // Takes a reference to the duel manager, the cube representing the arena,
     // A location for the lobby to return players to after the fight, and a boolean
@@ -50,9 +54,21 @@ public class EventListener implements Listener {
             }
 
             // Maintain items on death
-            if (plugin.keepInventory) {
-                event.setKeepInventory(true);
-            }
+            /*
+             if (plugin.keepInventory) {
+             event.setKeepInventory(true);
+             }
+             */
+            PlayerInventory killerInv = killer.getInventory();
+            PlayerInventory opponentInv = opponent.getInventory();
+            killerInv.setHelmet(new ItemStack(Material.IRON_HELMET, 1));
+            killerInv.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
+            killerInv.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
+            killerInv.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
+            opponentInv.setHelmet(new ItemStack(Material.IRON_HELMET, 1));
+            opponentInv.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
+            opponentInv.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
+            opponentInv.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
 
             // Maintain experience on death
             if (plugin.keepXP) {
@@ -68,27 +84,27 @@ public class EventListener implements Listener {
             // If the player did not kill themself
             if (killer != dead) {
                 // Display loss message.
-                dead.sendMessage(ChatColor.YELLOW + "You were defeated by " + killer.getDisplayName()
+                dead.sendMessage(ChatColor.GOLD + "You were defeated by " + killer.getDisplayName()
                         + "!\nThey had %" + floor((killer.getHealth() / killer.getMaxHealth()) * 100)
                         + " of their health left. (" + (killer.getHealth() / 2) + " hearts)");
 
                 // Display win message.
-                killer.sendMessage(ChatColor.GREEN + "You defeated " + dead.getDisplayName() + "!");
+                killer.sendMessage(ChatColor.GOLD + "You defeated " + dead.getDisplayName() + "!");
 
                 // Broadcast duel message for this death
-                event.setDeathMessage(killer.getDisplayName() + " defeated " + dead.getDisplayName() + " in a duel!");
+                //event.setDeathMessage(killer.getDisplayName() + " defeated " + dead.getDisplayName() + " in a duel!");
             } else {
                 // Send a messge to the player that killed themself
-                dead.sendMessage(ChatColor.RED + "Are you even trying?");
+                dead.sendMessage(ChatColor.GOLD + "Are you even trying?");
 
                 // Send a message to the opponent.
-                opponent.sendMessage(ChatColor.GREEN + "Your oponent killed themselves! You win!");
+                opponent.sendMessage(ChatColor.GOLD + "Your oponent killed themselves! You win!");
                 opponent.setHealth(opponent.getMaxHealth());
 
                 // Set a suicide death message
-                event.setDeathMessage(dead.getDisplayName() + " killed themselves while dueling " + opponent.getDisplayName());
+                //event.setDeathMessage(dead.getDisplayName() + " killed themselves while dueling " + opponent.getDisplayName());
             }
-            
+
             // Refill the health of the combatants
             dead.setHealth(dead.getMaxHealth());
             opponent.setHealth(opponent.getMaxHealth());
@@ -98,7 +114,7 @@ public class EventListener implements Listener {
             if (!(lobbyChunk.isLoaded())) {
                 lobbyChunk.load();
             }
-            
+
             // Teleport the combatants to the lobby
             dead.teleport(plugin.lobbyLoc);
             opponent.teleport(plugin.lobbyLoc);

@@ -122,7 +122,7 @@ public class EventListener implements Listener {
         }
     }
 
-    public void clearInventories(Player killer, Player opponent) {
+    public static void clearInventories(Player killer, Player opponent) {
         PlayerInventory killerInv = killer.getInventory();
         PlayerInventory opponentInv = opponent.getInventory();
         killerInv.clear();
